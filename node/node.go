@@ -10,6 +10,8 @@ import (
 	httphelper "github.com/SamvelHov02/HomeCloudHTTP"
 )
 
+const VaultPath = "/Users/samvelhovhannisyan/Documents/dev/Personal/HomeCloud/client/Vault"
+
 /*
 Function starts a client process
 method : int
@@ -47,8 +49,8 @@ func Start(method int, resource string) httphelper.ResponseBody {
 	return responseData
 }
 
-func UpdateFile(response httphelper.ResponseBody) {
-	f, err := os.Create("/Users/samvelhovhannisyan/Documents/dev/Personal/HomeCloud/client/Vault/test4.md")
+func UpdateFile(response httphelper.ResponseBody, resource string) {
+	f, err := os.Create(VaultPath + "/" + resource)
 
 	if err != nil {
 		log.Fatal(err)
