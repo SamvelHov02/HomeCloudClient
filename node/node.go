@@ -50,7 +50,7 @@ func Start(method int, resource string) httphelper.ResponseBody {
 }
 
 func UpdateFile(response httphelper.ResponseBody, resource string) {
-	f, err := os.Create(VaultPath + "/" + resource)
+	f, err := os.Create(VaultPath + resource)
 
 	if err != nil {
 		log.Fatal(err)

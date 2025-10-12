@@ -8,7 +8,7 @@ import (
 func main() {
 	fmt.Println("Hello from the Client side")
 	method := 1
-	resp := Node.Start(method, "test1.md")
+	resp := Node.Start(method, "/test1.md")
 
 	/*
 		For which operations does the Client need to change ITS local Vault
@@ -18,6 +18,6 @@ func main() {
 		DELETE 	: NO, tells server to sync with the changes client has made
 	*/
 	if method == 1 {
-		Node.UpdateFile(resp, "test1.md")
+		Node.UpdateFile(resp, "/test1.md")
 	}
 }

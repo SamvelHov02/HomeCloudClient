@@ -24,7 +24,7 @@ func TestUpdateFile(t *testing.T) {
 
 func TestUpdatefileNoFile(t *testing.T) {
 	resp := httphelper.ResponseBody{Data: "# Test file 1\n\nA little more data"}
-	UpdateFile(resp, "test3.md")
+	UpdateFile(resp, "/test3.md")
 	actual, err := os.ReadFile("/Users/samvelhovhannisyan/Documents/dev/Personal/HomeCloud/client/Vault/test3.md")
 
 	if err != nil {
