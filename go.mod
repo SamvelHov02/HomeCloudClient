@@ -2,6 +2,6 @@ module client
 
 go 1.24.0
 
-require github.com/SamvelHov02/HomeCloudHTTP v0.0.0-20251011231427-03e1758bacb4 // indirect
+require github.com/SamvelHov02/HomeCloudHTTP v0.0.0-20251015131659-0a86d09e7041
 
 replace github.com/SamvelHov02/HomeCloudHTTP => ../httphelper

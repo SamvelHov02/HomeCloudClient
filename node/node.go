@@ -62,3 +62,45 @@ func UpdateFile(response httphelper.ResponseBody, resource string) {
 	w.Flush()
 	f.Close()
 }
+
+func GetLocalMerkle() httphelper.Leaf {
+	tree := &httphelper.Tree{}
+	tree.Init(VaultPath)
+	tree.Build()
+	tree.ComputeHash()
+
+	leaf := httphelper.Leaf{
+		Hash:     tree.RootHash,
+		Name:     tree.Root,
+		Children: tree.Children,
+		Category: "dir",
+	}
+
+	return leaf
+}
+
+func CompareTrees(serverLeaf httphelper.Leaf, clientLeaf httphelper.Leaf) []string {
+	var difference []string
+
+	// If there are no changes then the Root hash will be the same
+	if serverLeaf.Equal(clientLeaf) {
+		return difference
+	} else {
+		for _, sChild := range serverLeaf.Children {
+			for _, cChild := range clientLeaf.Children {
+				/*
+					1. Same file and same hash
+					2. Same file and different hash
+					3. Different files
+				*/
+
+				if sChild.Equal(*cChild) && cChild.Hash != sChild.Hash && cChild.Category == "file" {
+					difference = append(difference, cChild.Name)
+				} else if sChild.Equal(*cChild) && cChild.Hash != sChild.Hash && cChild.Category == "dir" {
+					difference = append(difference, CompareTrees(*sChild, *cChild)...)
+				}
+			}
+		}
+	}
+	return difference
+}
