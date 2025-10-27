@@ -1,23 +1,22 @@
 package main
 
 import (
-	Node "client/node"
+	"client/cli"
 	"fmt"
+	"os"
 )
 
 func main() {
+	args := os.Args
 	fmt.Println("Hello from the Client side")
-	method := 1
-	resp := Node.Start(method, "/test1.md")
+	var cmd *cli.Command
 
-	/*
-		For which operations does the Client need to change ITS local Vault
-		GET 	: YES, needs to update since it's used for syncing
-		POST	: NO, tells server to sync with the changes client has made
-		PUT 	: NO, tells server to sync with the changes client has made
-		DELETE 	: NO, tells server to sync with the changes client has made
-	*/
-	if method == 1 {
-		Node.UpdateFile(resp, "/test1.md")
+	switch args[1] {
+	case "-gt":
+		cmd = cli.GetTreeCmd
+	case "-g":
+		cmd = cli.GetFile
 	}
+
+	cmd.Execute()
 }
