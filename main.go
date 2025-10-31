@@ -11,8 +11,6 @@ func main() {
 	fmt.Println("Hello from the Client side")
 	var cmd *cli.Command
 
-	fmt.Println(args[2])
-
 	switch args[1] {
 	case "-gt":
 		cmd = cli.GetTreeCmd

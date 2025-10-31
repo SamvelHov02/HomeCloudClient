@@ -15,7 +15,7 @@ var GetTreeCmd = &Command{
 	Name: "Get Tree",
 
 	Run: func(cmd *Command) {
-		resp := Node.Start("get", "/tree")
+		resp := Node.Start("get", "tree")
 		tree := Node.GetLocalMerkle()
 		serverTree := &httphelper.Tree{}
 		dataRaw, err := json.Marshal(resp.Data)
