@@ -15,7 +15,7 @@ var GetTreeCmd = &Command{
 	Name: "Get Tree",
 
 	Run: func(cmd *Command) {
-		resp := Node.Start(1, "/tree")
+		resp := Node.Start("get", "/tree")
 		tree := Node.GetLocalMerkle()
 		serverTree := &httphelper.Tree{}
 		dataRaw, err := json.Marshal(resp.Data)
@@ -38,7 +38,7 @@ var GetTreeCmd = &Command{
 		// -r resolver, gets all the updated files
 		if _, ok := cmd.FlagsParam["-r"]; ok {
 			for _, file := range differences {
-				resp := Node.Start(1, file)
+				resp := Node.Start("get", file)
 				Node.UpdateFile(resp, file)
 			}
 		} else {
@@ -51,7 +51,7 @@ var GetFile = &Command{
 	Name:        "Get File",
 	Description: "Fetches a file from the server",
 	Run: func(cmd *Command) {
-		resp := Node.Start(1, cmd.FlagsParam["-g"])
+		resp := Node.Start("get", cmd.FlagsParam["-g"])
 		Node.UpdateFile(resp, cmd.FlagsParam["-g"])
 	},
 }

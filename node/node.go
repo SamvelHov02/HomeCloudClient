@@ -2,6 +2,7 @@ package Node
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -10,7 +11,7 @@ import (
 	httphelper "github.com/SamvelHov02/HomeCloudHTTP"
 )
 
-const VaultPath = "/Users/samvelhovhannisyan/Documents/dev/Personal/HomeCloud/client/Vault"
+const VaultPath = "/home/samo/dev/HomeCloud/client/"
 
 /*
 Function starts a client process
@@ -20,10 +21,12 @@ method : int
 - 3 = PUT
 - 4 = DELETE
 */
-func Start(method int, resource string) httphelper.ResponseBody {
+func Start(method string, resource string) httphelper.ResponseBody {
+	fmt.Println("Starting client process...")
 	conn, err := net.Dial("tcp", "localhost:8080")
 
 	if err != nil {
+		fmt.Println("Error connecting to server:", err)
 		log.Fatal(err)
 	}
 	defer conn.Close()
@@ -31,7 +34,8 @@ func Start(method int, resource string) httphelper.ResponseBody {
 	var h httphelper.Header
 	h.Add("Accept", "application/json")
 
-	request := httphelper.WriteRequest(method, resource, h)
+	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h)
+	fmt.Println("Request:", string(request))
 
 	_, err = conn.Write(request)
 
@@ -40,6 +44,8 @@ func Start(method int, resource string) httphelper.ResponseBody {
 	}
 
 	response, err := io.ReadAll(conn)
+
+	fmt.Println("Response:", string(response))
 
 	if err != nil {
 		log.Fatal(err)
