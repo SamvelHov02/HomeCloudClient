@@ -42,7 +42,7 @@ var GetTreeCmd = &Command{
 				Node.UpdateFile(resp, file)
 			}
 		} else {
-			fmt.Println(differences)
+			fmt.Println("Printing only the differences : ", differences)
 		}
 	},
 }
