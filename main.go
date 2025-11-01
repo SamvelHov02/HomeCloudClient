@@ -16,6 +16,10 @@ func main() {
 		cmd = cli.GetTreeCmd
 	case "-g":
 		cmd = cli.GetFile
+	case "-p":
+		cmd = cli.PostFile
+	case "-pd":
+		fmt.Println("Placeholder")
 	}
 
 	// Need to get all flags before executing
