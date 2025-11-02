@@ -44,11 +44,8 @@ func Start(method string, resource string) httphelper.Body {
 			log.Fatal(err)
 		}
 
-		if Info.IsDir() {
-			// For now if the user wants to create a Folder on the server
-			// Folder files have to be created on the server seperately
-			body.Data = "dir"
-		} else {
+		// Directories don't need to be read
+		if !Info.IsDir() {
 			bodyData, err := os.ReadFile(VaultPath + resource)
 			if err != nil {
 				log.Fatal(err)
