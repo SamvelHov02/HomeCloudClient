@@ -21,7 +21,7 @@ method : int
 - 3 = PUT
 - 4 = DELETE
 */
-func Start(method string, resource string) httphelper.ResponseBody {
+func Start(method string, resource string) httphelper.Body {
 	fmt.Println("Starting client process...")
 	conn, err := net.Dial("tcp", "localhost:8080")
 
@@ -34,8 +34,30 @@ func Start(method string, resource string) httphelper.ResponseBody {
 	var h httphelper.Header
 	h.Add("Accept", "application/json")
 
-	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h)
-	fmt.Println("Request:", string(request))
+	body := httphelper.Body{}
+
+	switch method {
+	case "post":
+		Info, err := os.Stat(VaultPath + resource)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if !Info.IsDir() {
+			bodyData, err := os.ReadFile(VaultPath + resource)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			body.Data = string(bodyData)
+			h.Add("Content-Type", "application/json")
+		} else {
+			resource = "dir/" + resource
+		}
+	}
+
+	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)
 
 	_, err = conn.Write(request)
 
@@ -45,17 +67,22 @@ func Start(method string, resource string) httphelper.ResponseBody {
 
 	response, err := io.ReadAll(conn)
 
-	fmt.Println("Response:", string(response))
-
 	if err != nil {
 		log.Fatal(err)
 	}
 	// TODO
-	responseData, _, _ := httphelper.ReadResponse(response)
+	responseData, _, status := httphelper.ReadResponse(response)
+
+	switch status.Code {
+	case 204:
+		fmt.Println("File successfully uploaded")
+	case 409:
+		fmt.Println("File already exists on the server")
+	}
 	return responseData
 }
 
-func UpdateFile(response httphelper.ResponseBody, resource string) {
+func UpdateFile(response httphelper.Body, resource string) {
 	f, err := os.Create(VaultPath + resource)
 
 	if err != nil {
@@ -64,7 +91,12 @@ func UpdateFile(response httphelper.ResponseBody, resource string) {
 
 	w := bufio.NewWriter(f)
 
-	w.Write([]byte(response.Data))
+	_, err = w.Write([]byte(response.Data))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	w.Flush()
 	f.Close()
 }

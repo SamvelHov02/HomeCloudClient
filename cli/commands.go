@@ -9,7 +9,7 @@ import (
 	httphelper "github.com/SamvelHov02/HomeCloudHTTP"
 )
 
-const VaultPath = "/Users/samvelhovhannisyan/Documents/dev/Personal/HomeCloud/client/Vault"
+const VaultPath = "/home/samo/dev/HomeCloud/client/"
 
 var GetTreeCmd = &Command{
 	Name: "Get Tree",
@@ -53,5 +53,21 @@ var GetFile = &Command{
 	Run: func(cmd *Command) {
 		resp := Node.Start("get", cmd.FlagsParam["-g"])
 		Node.UpdateFile(resp, cmd.FlagsParam["-g"])
+	},
+}
+
+var PostFile = &Command{
+	Name:        "Create File",
+	Description: "Creates a new File received from the client",
+	Run: func(cmd *Command) {
+		Node.Start("post", cmd.FlagsParam["-p"])
+	},
+}
+
+var PostDir = &Command{
+	Name:        "Create Directory",
+	Description: "Creates a local directory on the server",
+	Run: func(cmd *Command) {
+		Node.Start("post", cmd.FlagsParam["-pd"])
 	},
 }

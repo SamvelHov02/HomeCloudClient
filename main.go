@@ -8,7 +8,7 @@ import (
 
 func main() {
 	args := os.Args
-	fmt.Println("Hello from the Client side")
+	fmt.Println("Hello from the Client side", args)
 	var cmd *cli.Command
 
 	switch args[1] {
@@ -16,10 +16,13 @@ func main() {
 		cmd = cli.GetTreeCmd
 	case "-g":
 		cmd = cli.GetFile
+	case "-p":
+		cmd = cli.PostFile
+	case "-pd":
+		cmd = cli.PostDir
 	}
 
 	// Need to get all flags before executing
-	fmt.Println(cmd)
 	cmd.Init(cmd.Name)
 	cmd.Build(args[1:])
 	cmd.Execute()
