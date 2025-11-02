@@ -44,7 +44,6 @@ func Start(method string, resource string) httphelper.Body {
 			log.Fatal(err)
 		}
 
-		// Directories don't need to be read
 		if !Info.IsDir() {
 			bodyData, err := os.ReadFile(VaultPath + resource)
 			if err != nil {
@@ -53,11 +52,12 @@ func Start(method string, resource string) httphelper.Body {
 
 			body.Data = string(bodyData)
 			h.Add("Content-Type", "application/json")
+		} else {
+			resource = "dir/" + resource
 		}
 	}
 
 	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)
-	fmt.Println(string(request))
 
 	_, err = conn.Write(request)
 
@@ -66,8 +66,6 @@ func Start(method string, resource string) httphelper.Body {
 	}
 
 	response, err := io.ReadAll(conn)
-
-	fmt.Println("Response:", string(response))
 
 	if err != nil {
 		log.Fatal(err)

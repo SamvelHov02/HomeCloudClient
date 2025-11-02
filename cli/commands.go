@@ -68,6 +68,6 @@ var PostDir = &Command{
 	Name:        "Create Directory",
 	Description: "Creates a local directory on the server",
 	Run: func(cmd *Command) {
-		Node.Start("post", "dir")
+		Node.Start("post", cmd.FlagsParam["-pd"])
 	},
 }

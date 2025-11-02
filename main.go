@@ -17,14 +17,12 @@ func main() {
 	case "-g":
 		cmd = cli.GetFile
 	case "-p":
-		fmt.Println("Gets here")
 		cmd = cli.PostFile
 	case "-pd":
-		fmt.Println("Placeholder")
+		cmd = cli.PostDir
 	}
 
 	// Need to get all flags before executing
-	fmt.Println(cmd)
 	cmd.Init(cmd.Name)
 	cmd.Build(args[1:])
 	cmd.Execute()
