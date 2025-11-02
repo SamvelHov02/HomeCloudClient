@@ -8,7 +8,7 @@ import (
 
 func main() {
 	args := os.Args
-	fmt.Println("Hello from the Client side")
+	fmt.Println("Hello from the Client side", args)
 	var cmd *cli.Command
 
 	switch args[1] {
@@ -17,6 +17,7 @@ func main() {
 	case "-g":
 		cmd = cli.GetFile
 	case "-p":
+		fmt.Println("Gets here")
 		cmd = cli.PostFile
 	case "-pd":
 		fmt.Println("Placeholder")

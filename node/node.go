@@ -52,12 +52,12 @@ func Start(method string, resource string) httphelper.Body {
 			}
 
 			body.Data = string(bodyData)
+			h.Add("Content-Type", "application/json")
 		}
-
 	}
 
 	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)
-	fmt.Println("Request:", string(request))
+	fmt.Println(string(request))
 
 	_, err = conn.Write(request)
 
