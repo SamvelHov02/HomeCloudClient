@@ -63,6 +63,7 @@ func Start(method string, resource string) httphelper.Body {
 		}
 
 		body.Data = string(file)
+		h.Add("Content-Type", "application/json")
 	}
 
 	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)

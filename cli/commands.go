@@ -76,6 +76,6 @@ var PutFile = &Command{
 	Name:        "Update file",
 	Description: "Updates a file on the server",
 	Run: func(cmd *Command) {
-		Node.Start("post", cmd.FlagsParam["-u"])
+		Node.Start("put", cmd.FlagsParam["-u"])
 	},
 }
