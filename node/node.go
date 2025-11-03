@@ -64,6 +64,19 @@ func Start(method string, resource string) httphelper.Body {
 
 		body.Data = string(file)
 		h.Add("Content-Type", "application/json")
+	case "delete":
+		Info, err := os.Stat(VaultPath + resource)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if !Info.IsDir() {
+			h.Add("Content-Type", "application/json")
+		} else {
+			resource = "dir/" + resource
+		}
+
 	}
 
 	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)
