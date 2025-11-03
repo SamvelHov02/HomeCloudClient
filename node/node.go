@@ -55,6 +55,15 @@ func Start(method string, resource string) httphelper.Body {
 		} else {
 			resource = "dir/" + resource
 		}
+	case "put":
+		file, err := os.ReadFile(VaultPath + resource)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		body.Data = string(file)
+		h.Add("Content-Type", "application/json")
 	}
 
 	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)
@@ -78,6 +87,8 @@ func Start(method string, resource string) httphelper.Body {
 		fmt.Println("File successfully uploaded")
 	case 409:
 		fmt.Println("File already exists on the server")
+	case 400:
+		fmt.Println("Bad request")
 	}
 	return responseData
 }

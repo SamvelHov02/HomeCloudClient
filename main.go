@@ -20,6 +20,8 @@ func main() {
 		cmd = cli.PostFile
 	case "-pd":
 		cmd = cli.PostDir
+	case "-u":
+		cmd = cli.PutFile
 	}
 
 	// Need to get all flags before executing
