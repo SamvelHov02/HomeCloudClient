@@ -71,12 +71,11 @@ func Start(method string, resource string) httphelper.Body {
 			log.Fatal(err)
 		}
 
-		if !Info.IsDir() {
-			h.Add("Content-Type", "application/json")
-		} else {
+		if Info.IsDir() {
 			resource = "dir/" + resource
 		}
-
+		h.Add("Content-Type", "application/json")
+		h.Add("Content-Length", "0")
 	}
 
 	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)
@@ -97,7 +96,7 @@ func Start(method string, resource string) httphelper.Body {
 
 	switch status.Code {
 	case 204:
-		fmt.Println("File successfully uploaded")
+		fmt.Println("Operation Successful!")
 	case 409:
 		fmt.Println("File already exists on the server")
 	case 400:
