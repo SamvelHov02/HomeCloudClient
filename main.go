@@ -22,6 +22,8 @@ func main() {
 		cmd = cli.PostDir
 	case "-u":
 		cmd = cli.PutFile
+	case "-d":
+		cmd = cli.DeleteResource
 	}
 
 	// Need to get all flags before executing
