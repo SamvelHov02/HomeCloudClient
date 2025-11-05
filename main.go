@@ -28,6 +28,7 @@ func main() {
 
 	// Need to get all flags before executing
 	cmd.Init(cmd.Name)
+	fmt.Println("Args are : ", args[1:])
 	cmd.Build(args[1:])
 	cmd.Execute()
 }
