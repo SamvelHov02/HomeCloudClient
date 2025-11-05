@@ -32,10 +32,7 @@ var GetTreeCmd = &Command{
 			Name:     serverTree.Root,
 		}
 
-		fmt.Println(serverTree.Children)
-		fmt.Println("-----------------------")
-		fmt.Println(tree.Children)
-
+		fmt.Println(cmd.FlagsParam)
 		differences := Node.CompareTrees(l, tree)
 
 		// -r resolver, gets all the updated files

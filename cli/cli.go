@@ -14,12 +14,13 @@ func (c *Command) Init(name string) {
 }
 
 func (c *Command) Build(args []string) {
-	var key string
+	var previous string
 	for _, arg := range args {
 		if arg[0] == '-' {
-			key = arg
+			c.FlagsParam[arg] = ""
+			previous = arg
 		} else {
-			c.FlagsParam[key] = arg
+			c.FlagsParam[previous] = arg
 		}
 	}
 }
