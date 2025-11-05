@@ -21,7 +21,7 @@ method : int
 - 3 = PUT
 - 4 = DELETE
 */
-func Start(method string, resource string) httphelper.Body {
+func Start(method string, resource string) ([]byte, httphelper.Status) {
 	fmt.Println("Starting client process...")
 	conn, err := net.Dial("tcp", "localhost:8080")
 
@@ -76,6 +76,8 @@ func Start(method string, resource string) httphelper.Body {
 		}
 		h.Add("Content-Type", "application/json")
 		h.Add("Content-Length", "0")
+	default:
+		h.Add("Content-Length", "0")
 	}
 
 	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)
@@ -91,18 +93,10 @@ func Start(method string, resource string) httphelper.Body {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// TODO
-	responseData, _, status := httphelper.ReadResponse(response)
 
-	switch status.Code {
-	case 204:
-		fmt.Println("Operation Successful!")
-	case 409:
-		fmt.Println("File already exists on the server")
-	case 400:
-		fmt.Println("Bad request")
-	}
-	return responseData
+	responseData, _, Status := httphelper.ReadResponse(response)
+
+	return responseData, Status
 }
 
 func UpdateFile(response httphelper.Body, resource string) {
@@ -126,7 +120,7 @@ func UpdateFile(response httphelper.Body, resource string) {
 
 func GetLocalMerkle() httphelper.Leaf {
 	tree := &httphelper.Tree{}
-	tree.Init(VaultPath)
+	tree.Init(VaultPath + "Vault")
 	tree.Build()
 	tree.ComputeHash()
 
@@ -159,9 +153,22 @@ func CompareTrees(serverLeaf httphelper.Leaf, clientLeaf httphelper.Leaf) []stri
 					difference = append(difference, cChild.Name)
 				} else if sChild.Equal(*cChild) && cChild.Hash != sChild.Hash && cChild.Category == "dir" {
 					difference = append(difference, CompareTrees(*sChild, *cChild)...)
+				} else {
+					difference = append(difference, sChild.Name)
 				}
 			}
 		}
 	}
 	return difference
+}
+
+func StatusResult(Status httphelper.Status) {
+	switch Status.Code {
+	case 204:
+		fmt.Println("Operation Successful!")
+	case 409:
+		fmt.Println("File already exists on the server")
+	case 400:
+		fmt.Println("Bad request")
+	}
 }
