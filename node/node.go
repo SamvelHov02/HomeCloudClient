@@ -11,7 +11,7 @@ import (
 	httphelper "github.com/SamvelHov02/HomeCloudHTTP"
 )
 
-const VaultPath = "/home/samo/dev/HomeCloud/client/"
+const VaultPath = "/Users/samvelhovhannisyan/Documents/dev/Personal/HomeCloud/client/"
 
 /*
 Function starts a client process
@@ -23,7 +23,7 @@ method : int
 */
 func Start(method string, resource string) ([]byte, httphelper.Status) {
 	fmt.Println("Starting client process...")
-	conn, err := net.Dial("tcp", "localhost:8080")
+	conn, err := net.Dial("tcp", "192.168.50.132:8080")
 
 	if err != nil {
 		fmt.Println("Error connecting to server:", err)
