@@ -55,13 +55,16 @@ var GetFile = &Command{
 	Description: "Fetches a file from the server",
 	Run: func(cmd *Command) {
 		resp, Status := Node.Start("get", cmd.FlagsParam["-g"])
-		body := httphelper.Body{}
-		err := json.Unmarshal(resp, &body)
+		if Status.Code == 200 {
+			body := httphelper.Body{}
+			err := json.Unmarshal(resp, &body)
 
-		if err != nil {
-			log.Fatal(err)
+			if err != nil {
+				fmt.Println("Fails here when trying to unmarshal") 
+				log.Fatal(err)
+			}
+			Node.UpdateFile(body, cmd.FlagsParam["-g"])
 		}
-		Node.UpdateFile(body, cmd.FlagsParam["-g"])
 		Node.StatusResult(Status)
 	},
 }
@@ -71,7 +74,8 @@ var PostFile = &Command{
 	Name:        "Create File",
 	Description: "Creates a new File received from the client",
 	Run: func(cmd *Command) {
-		Node.Start("post", cmd.FlagsParam["-p"])
+		_, Status := Node.Start("post", cmd.FlagsParam["-p"])
+		Node.StatusResult(Status)
 	},
 }
 
@@ -79,7 +83,8 @@ var PostDir = &Command{
 	Name:        "Create Directory",
 	Description: "Creates a local directory on the server",
 	Run: func(cmd *Command) {
-		Node.Start("post", cmd.FlagsParam["-pd"])
+		_, Status := Node.Start("post", cmd.FlagsParam["-pd"])
+		Node.StatusResult(Status)
 	},
 }
 
@@ -87,7 +92,8 @@ var PutFile = &Command{
 	Name:        "Update file",
 	Description: "Updates a file on the server",
 	Run: func(cmd *Command) {
-		Node.Start("put", cmd.FlagsParam["-u"])
+		_, Status := Node.Start("put", cmd.FlagsParam["-u"])
+		Node.StatusResult(Status)
 	},
 }
 
@@ -95,6 +101,7 @@ var DeleteResource = &Command{
 	Name:        "Delete Resource",
 	Description: "Deletes a resource, file or directory from the server",
 	Run: func(cmd *Command) {
-		Node.Start("delete", cmd.FlagsParam["-d"])
+		_, Status := Node.Start("delete", cmd.FlagsParam["-d"])
+		Node.StatusResult(Status)
 	},
 }

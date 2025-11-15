@@ -23,14 +23,7 @@ method : int
 */
 func Start(method string, resource string) ([]byte, httphelper.Status) {
 	fmt.Println("Starting client process...")
-	conn, err := net.Dial("tcp", "192.168.50.132:8080")
-
-	if err != nil {
-		fmt.Println("Error connecting to server:", err)
-		log.Fatal(err)
-	}
-	defer conn.Close()
-
+	// conn, err := net.Dial("tcp", "192.168.50.132:8080")
 	var h httphelper.Header
 	h.Add("Accept", "application/json")
 
@@ -81,6 +74,15 @@ func Start(method string, resource string) ([]byte, httphelper.Status) {
 	}
 
 	request := httphelper.WriteRequest(method, "api/"+method+"/"+resource, h, body)
+
+	conn, err := net.Dial("tcp", "localhost:8080")
+
+	if err != nil {
+		fmt.Println("Error connecting to server:", err)
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
 
 	_, err = conn.Write(request)
 
@@ -166,6 +168,8 @@ func StatusResult(Status httphelper.Status) {
 	switch Status.Code {
 	case 204:
 		fmt.Println("Operation Successful!")
+	case 404:
+		fmt.Println("Resource wasn't found")
 	case 409:
 		fmt.Println("File already exists on the server")
 	case 400:
